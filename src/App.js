@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Celcius from "./celcius";
+import Fahrenheit from "./fahrenheit";
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { celcius: "", fahrenheit: "" };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  toCelcius = (d) => ((d - 32) * 5) / 9;
+  toFahrenheit = (d) => (d * 9) / 5 + 32;
+  handleChange(event) {
+    const active = event.target.name;
+    const value = event.target.value;
+    const d = value != "" ? parseFloat(value) : 0;
+    if (active != "c") {
+      const converted = this.toCelcius(d);
+      this.setState({
+        fahrenheit: d,
+        celcius: converted,
+      });
+    } else {
+      const converted = this.toFahrenheit(d);
+      this.setState({
+        fahrenheit: converted,
+        celcius: d,
+      });
+    }
+  }
+  render() {
+    return (
+      <div className="app">
+        <Celcius onchanged={this.handleChange} d={this.state.celcius} />
+        <Fahrenheit onchanged={this.handleChange} d={this.state.fahrenheit} />
+      </div>
+    );
+  }
 }
 
 export default App;
